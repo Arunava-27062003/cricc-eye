@@ -1,4 +1,4 @@
-# Criccbuzz RN
+# Crickit
 
 A dark-first Expo cricket app with a separate Express backend for users, profiles, and proxied cricket API access.
 
@@ -31,7 +31,7 @@ The backend lives in `backend/` and uses:
 - Express (JavaScript/CommonJS)
 - Prisma + SQLite
 - JWT auth with hashed passwords
-- CricAPI proxy routes
+- RapidAPI Cricbuzz proxy routes with backend caching and demo fallback
 
 ### First-time backend setup
 
@@ -42,18 +42,19 @@ The backend lives in `backend/` and uses:
    npm install
    ```
 
-2. The backend `.env` file is already present with placeholder values. Replace them with your real secrets before using live cricket data:
+2. The backend `.env` file is already present with placeholder values. Put your real secrets in `backend/.env.local` so they override the placeholders without being tracked:
 
    ```bash
    JWT_SECRET=your-real-secret
-   CRICKET_API_KEY=your-real-cricapi-key
+   RAPIDAPI_KEY=your-real-rapidapi-key
    ```
 
-3. Set these values in `backend/.env`:
+3. Set these values in `backend/.env.local`:
 
    - `DATABASE_URL`
    - `JWT_SECRET`
-   - `CRICKET_API_KEY`
+   - `RAPIDAPI_KEY`
+   - `RAPIDAPI_HOST`
    - `PORT`
    - `HOST`
    - `CORS_ORIGIN`
@@ -112,4 +113,5 @@ These require a bearer token from the auth endpoints.
 ## Notes
 
 - The mobile app now uses the backend for both auth/profile and cricket data when `EXPO_PUBLIC_BACKEND_URL` is configured.
-- If the backend URL is missing or the backend cricket feed fails, the app falls back to bundled demo data.
+- The backend now uses RapidAPI Cricbuzz as the primary live source and falls back to bundled demo data if the key is missing, the quota is exhausted, or live data is unavailable.
+- The app uses longer cache windows for cricket queries so normal navigation does not repeatedly consume the free-tier quota.

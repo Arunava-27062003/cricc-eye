@@ -15,7 +15,7 @@ export function useCurrentMatchesQuery() {
   return useQuery({
     queryKey: ['current-matches'],
     queryFn: getCurrentMatches,
-    staleTime: 20_000,
+    staleTime: 10 * 60 * 1000,
   });
 }
 
@@ -23,7 +23,7 @@ export function useScoreFeedQuery() {
   return useQuery({
     queryKey: ['score-feed'],
     queryFn: getScoreFeed,
-    staleTime: 20_000,
+    staleTime: 10 * 60 * 1000,
   });
 }
 
@@ -32,6 +32,7 @@ export function useSeriesQuery(search: string) {
     queryKey: ['series', search],
     queryFn: () => getSeries(search),
     placeholderData: keepPreviousData,
+    staleTime: 12 * 60 * 60 * 1000,
   });
 }
 
@@ -40,6 +41,8 @@ export function usePlayersQuery(search: string) {
     queryKey: ['players', search],
     queryFn: () => getPlayers(search),
     placeholderData: keepPreviousData,
+    enabled: search.trim().length >= 2,
+    staleTime: 24 * 60 * 60 * 1000,
   });
 }
 
@@ -48,6 +51,7 @@ export function useMatchInfoQuery(id: string) {
     queryKey: ['match', id],
     queryFn: () => getMatchInfo(id),
     enabled: Boolean(id),
+    staleTime: 10 * 60 * 1000,
   });
 }
 
@@ -56,6 +60,7 @@ export function useMatchSquadQuery(id: string) {
     queryKey: ['match-squad', id],
     queryFn: () => getMatchSquad(id),
     enabled: Boolean(id),
+    staleTime: 10 * 60 * 1000,
   });
 }
 
@@ -64,6 +69,7 @@ export function useSeriesInfoQuery(id: string) {
     queryKey: ['series-info', id],
     queryFn: () => getSeriesInfo(id),
     enabled: Boolean(id),
+    staleTime: 12 * 60 * 60 * 1000,
   });
 }
 
@@ -72,5 +78,6 @@ export function usePlayerInfoQuery(id: string) {
     queryKey: ['player-info', id],
     queryFn: () => getPlayerInfo(id),
     enabled: Boolean(id),
+    staleTime: 7 * 24 * 60 * 60 * 1000,
   });
 }

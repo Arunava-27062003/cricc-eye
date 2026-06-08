@@ -29,8 +29,8 @@ export function SearchScreen() {
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { recentSearches, addRecentSearch, toggleSaved, isSaved } = useSavedStore();
-  const [search, setSearch] = useState('virat');
-  const [debouncedSearch, setDebouncedSearch] = useState('virat');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(search), 250);
@@ -78,7 +78,10 @@ export function SearchScreen() {
       ) : null}
 
       <PageSection>
-        <SectionHeader title="Results" subtitle={`${players.length} players loaded`} />
+        <SectionHeader
+          title="Results"
+          subtitle={debouncedSearch.trim().length >= 2 ? `${players.length} players loaded` : 'Type at least 2 letters to search'}
+        />
         {players.length ? (
           players.map((player, index) => (
             <PlayerCard
@@ -90,6 +93,8 @@ export function SearchScreen() {
               onToggleSave={() => toggleSaved(savePlayerPayload(player))}
             />
           ))
+        ) : debouncedSearch.trim().length < 2 ? (
+          <EmptyState title="Start searching" description="Type a player name to load profile matches." />
         ) : (
           <EmptyState title="No players found" description="Try a shorter search term or check the spelling." />
         )}

@@ -57,7 +57,7 @@ export function HomeScreen() {
       <PageSection style={styles.hero}>
         <View style={styles.heroTop}>
           <View style={styles.heroCopy}>
-            <Text style={styles.kicker}>CRICCBUZZ RN</Text>
+            <Text style={styles.kicker}>CRICKIT</Text>
             <Text style={styles.heroTitle}>Cleaner live scores. Dark-first by design.</Text>
             <Text style={styles.heroText}>
               Track current matches, upcoming fixtures, and saved cards without the clutter.
