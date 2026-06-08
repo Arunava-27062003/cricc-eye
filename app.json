@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "criccbuzz-rn",
+    "name": "Criccbuzz RN",
     "slug": "criccbuzz-rn",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
+      // "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -33,12 +33,13 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#06121B",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#06121B"
           }
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,

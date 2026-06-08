@@ -1,50 +1,115 @@
-# Welcome to your Expo app 👋
+# Criccbuzz RN
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A dark-first Expo cricket app with a separate Express backend for users, profiles, and proxied cricket API access.
 
-## Get started
+## App setup
 
-1. Install dependencies
+1. Install the root dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Start the Expo app:
 
    ```bash
-   npx expo start
+   npm run start
    ```
 
-In the output, you'll find options to open the app in a
+3. The repo now includes a root `.env` with:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   EXPO_PUBLIC_BACKEND_URL=auto
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   During local Expo development, `auto` derives the backend host from Expo and targets port `4000`. If needed, replace it with an explicit URL such as `http://192.168.1.20:4000`.
 
-## Get a fresh project
+## Backend setup
 
-When you're ready, run:
+The backend lives in `backend/` and uses:
+
+- Express (JavaScript/CommonJS)
+- Prisma + SQLite
+- JWT auth with hashed passwords
+- CricAPI proxy routes
+
+### First-time backend setup
+
+1. Install backend dependencies:
+
+   ```bash
+   cd backend
+   npm install
+   ```
+
+2. The backend `.env` file is already present with placeholder values. Replace them with your real secrets before using live cricket data:
+
+   ```bash
+   JWT_SECRET=your-real-secret
+   CRICKET_API_KEY=your-real-cricapi-key
+   ```
+
+3. Set these values in `backend/.env`:
+
+   - `DATABASE_URL`
+   - `JWT_SECRET`
+   - `CRICKET_API_KEY`
+   - `PORT`
+   - `HOST`
+   - `CORS_ORIGIN`
+
+4. Run the initial migration:
+
+   ```bash
+   npm run prisma:migrate -- --name init
+   ```
+
+5. Start the backend:
+
+   ```bash
+   npm run dev
+   ```
+
+### Root convenience scripts
+
+From the repository root you can run:
 
 ```bash
-npm run reset-project
+npm run backend:dev
+npm run backend:build
+npm run backend:migrate -- --name init
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Backend API surface
 
-## Learn more
+### Health
 
-To learn more about developing your project with Expo, look at the following resources:
+- `GET /api/health`
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Auth
 
-## Join the community
+- `POST /api/auth/register`
+- `POST /api/auth/login`
 
-Join our community of developers creating universal apps.
+### User/profile
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- `GET /api/users/me`
+- `PATCH /api/users/me`
+
+These require a bearer token from the auth endpoints.
+
+### Cricket proxy
+
+- `GET /api/cricket/current-matches`
+- `GET /api/cricket/score-feed`
+- `GET /api/cricket/series`
+- `GET /api/cricket/series/:id`
+- `GET /api/cricket/players`
+- `GET /api/cricket/players/:id`
+- `GET /api/cricket/matches/:id`
+- `GET /api/cricket/matches/:id/squad`
+
+## Notes
+
+- The mobile app now uses the backend for both auth/profile and cricket data when `EXPO_PUBLIC_BACKEND_URL` is configured.
+- If the backend URL is missing or the backend cricket feed fails, the app falls back to bundled demo data.
