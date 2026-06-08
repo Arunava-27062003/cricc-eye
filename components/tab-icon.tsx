@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
@@ -62,7 +63,9 @@ export function TabIcon({ focused, label, variant }: TabIconProps) {
   const styles = useThemedStyles(createStyles);
   const progress = useSharedValue(focused ? 1 : 0);
 
-  progress.value = withTiming(focused ? 1 : 0, { duration: 180 });
+  useEffect(() => {
+    progress.value = withTiming(focused ? 1 : 0, { duration: 180 });
+  }, [focused, progress]);
 
   const containerStyle = useAnimatedStyle(() => ({
     transform: [{ scale: 0.96 + progress.value * 0.04 }],

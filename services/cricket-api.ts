@@ -46,7 +46,8 @@ async function request<T>(
 
     return {
       data: response.data.data,
-      source: 'live',
+      source: response.data.source ?? 'live',
+      message: response.data.message,
     };
   } catch (error) {
     console.warn(`Falling back to demo data for ${url}`, error);

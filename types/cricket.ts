@@ -12,6 +12,8 @@ export interface ApiMeta {
 
 export interface ApiResponse<T> extends ApiMeta {
   data: T;
+  source?: DataSource;
+  message?: string;
 }
 
 export type DataSource = 'live' | 'demo';
